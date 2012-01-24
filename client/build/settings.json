@@ -1,0 +1,6 @@
+{
+  "assets": [
+    {"url":"/images/background.png", "name": "background"},
+    {"url":"/images/terrain.png", "name": "terrain" }
+  ]
+}

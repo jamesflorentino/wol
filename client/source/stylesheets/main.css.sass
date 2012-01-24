@@ -1,0 +1,86 @@
+@import compass/css3
+@import compass/reset
+
+$lineColor: rgba(0, 225, 200, 0.4)
+
+body
+  background: #333
+  font-family: 'Aldrich'
+
+#main
+  text-align: center
+
+#game
+  margin: auto
+  background: black
+  border: 1px solid #555
+  width: 980px
+  height: 700px
+  position: relative
+
+  h4
+    font-family: 'Play'
+    font-size: 12px
+    font-weight: bold
+    color: #00deff
+    display: block
+    text-transform: uppercase
+    position: absolute
+    top: -20px
+
+
+  canvas
+    position: absolute
+    top: 0
+    left: 0
+
+#turnList
+  background: rgba(0,0,0,0.4)
+  position: absolute
+  width: 130px
+  height: 360px
+  top: 25px
+  right: 5px
+  border: 1px solid $lineColor
+  +border-radius(3px)
+
+#actionMenu
+  position: absolute
+  width: 180px
+  height: 90px
+  margin-left: -90px
+  text-align: left
+
+  .move, .act, .skip
+    position: absolute
+    width: 70px
+    height: 62px
+    background: no-repeat top left
+    cursor: pointer
+    +opacity(0)
+    $cubic: cubic-bezier(.60, 0, .14, .98)
+    +transition(.4s $cubic)
+    +transform(rotateX(90deg))
+
+    &:hover
+      +opacity(1)
+
+  .move, .skip
+    top: 30px
+
+  .move
+    background-image: url(/images/unitaction_move.png)
+
+  .act
+    background-image: url(/images/unitaction_act.png)
+    left: 55px
+    +transition-delay(.1s)
+
+  .skip
+    background-image: url(/images/unitaction_skip.png)
+    left: 110px
+
+  &.active
+    .move, .skip, .act
+      +transform(rotateY(0deg))
+      +opacity(.7)
