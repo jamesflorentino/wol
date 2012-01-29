@@ -1,6 +1,11 @@
 @import compass/css3
 @import compass/reset
 
+
+$black: rgba(1,1,1,0.5)
+$cyan: rgba(0,255,255,0.7)
+$cyanFade: rgba(0,255,255,0.4)
+
 $lineColor: rgba(0, 225, 200, 0.4)
 
 body
@@ -12,11 +17,12 @@ body
 
 #game
   margin: auto
-  background: black
+  background: black 
   border: 1px solid #555
   width: 980px
   height: 700px
   position: relative
+  overflow: hidden
 
   h4
     font-family: 'Play'
@@ -37,12 +43,40 @@ body
 #turnList
   background: rgba(0,0,0,0.4)
   position: absolute
-  width: 130px
+  width: 180px
   height: 360px
   top: 25px
   right: 5px
   border: 1px solid $lineColor
   +border-radius(3px)
+
+  ul
+    display: block
+    padding: 0
+    width: auto
+
+    li
+      position: relative
+      background: $black
+      padding: 0
+      display: block
+      color: white
+      font-size: 12px
+      text-align: left
+      text-indent: 20px
+      height: 20px
+      line-height: 20px
+      margin-bottom: 1px
+
+    li a
+      background: red
+      width: 10px
+      height: 10px
+      display: block
+      position: absolute
+      top: 5px
+      left: 5px
+
 
 #actionMenu
   position: absolute
@@ -50,18 +84,33 @@ body
   height: 90px
   margin-left: -90px
   text-align: left
+  left: 50%
+  top: 10px
 
-  .move, .act, .skip
+  .closed
+    +opacity(0)
+    visibility: hidden
+    //+transform(rotateX(90deg))
+
+  .opened
+    //+transform(rotateY(0deg))
+    visibility: visible
+    +opacity(.7)
+
+
+  .move, .act, .skip, .cancel
+    @extend .closed
     position: absolute
     width: 70px
     height: 62px
     background: no-repeat top left
     cursor: pointer
-    +opacity(0)
     $cubic: cubic-bezier(.60, 0, .14, .98)
-    +transition(.4s $cubic)
-    +transform(rotateX(90deg))
+    $cubic: cubic-bezier(0.12, 0.89, 0, 1)
+    $cubic: cubic-bezier(.10, .72, 0, 1)
+    +transition(300ms $cubic)
 
+    
     &:hover
       +opacity(1)
 
@@ -72,9 +121,15 @@ body
     background-image: url(/images/unitaction_move.png)
 
   .act
+    +transition-duration(700ms)
+
+  .act, .cancel
     background-image: url(/images/unitaction_act.png)
     left: 55px
-    +transition-delay(.1s)
+
+  .cancel
+    background-image: url(/images/unitaction_cancel.png)
+    display: none
 
   .skip
     background-image: url(/images/unitaction_skip.png)
@@ -82,5 +137,136 @@ body
 
   &.active
     .move, .skip, .act
-      +transform(rotateY(0deg))
-      +opacity(.7)
+      @extend .opened
+
+  &.active.cancel
+    display: none
+    .move, .skip, .act
+      @extend .closed
+    .cancel
+      @extend .opened
+      display: block
+
+#actionConfirm
+  position: absolute
+  display: block
+  background: transparent
+  width: 100px
+  height: 100px
+  margin: -50px
+  display: none
+  .animated
+    +transition(.4s -webkit-transform cubic-bezier(0, 1, .30, 1))
+  .expanded
+    +opacity(1)
+  .collapsed
+    +opacity(0)
+    height: 0
+  .button
+    @extend .animated
+    @extend .collapsed
+    position: absolute
+    z-index: 100
+    width: 53px
+    height: 45px
+    top: 0
+    left: 0
+    background: url(/images/unitactions.png) no-repeat
+  .cancel.button
+    left: 43px
+    background-position: -55px 0px
+    +transition-delay(50ms)
+    &:hover
+      background-position: -55px -48px
+  .confirm.button
+    top: 23px
+    &:hover
+      background-position: 0px -48px
+  &.active
+    display: block
+    .button
+      @extend .expanded
+
+#game
+  background: url(/images/background.png)
+
+#unitInfo
+  position: absolute
+  background: $black
+  border: 1px solid $cyanFade
+  top: 5px
+  left: 5px
+  width: 240px
+  height: 110px
+  +border-radius(3px)
+
+  .name
+    position: absolute
+    color: $cyan
+    font-size: 13px
+    top: 15px
+    left: 90px
+
+  .portrait
+    position: absolute
+    top: 10px
+    left: 10px
+    width: 70px
+    height: 72px
+    background: black no-repeat top left
+    border: 1px solid $cyanFade
+
+  $margin: 10px
+  .gauge
+    position: absolute
+    width: 140px
+    height: 10px
+    top: 30px + $margin
+    left: 90px
+
+    .value
+      position: absolute
+      color: white
+      font-size: 11px
+      right: 0px
+      bottom: 0px
+      z-index: 1
+    
+    .bar, .background
+      width: 140px
+      height: 3px
+      position: absolute
+      bottom: 1px
+      background: gray
+      +transition(200ms width)
+
+    .background
+      height: 7px
+      margin-left: -2px
+      +opacity(.15)
+
+    &.health
+      .bar, .background
+        background: #41ff33
+    
+    &.energy
+      top: 45px + $margin
+      .bar, .background
+        background-color: #9833ff
+
+    &.action
+      top: 60px + $margin
+      .bar, .background
+        background-color: #ffbe33
+
+    &.turn
+      top: 70px + $margin
+      left: 10px
+      width: 70px
+      .bar, .background
+        width: 70px
+        height: 3px
+        margin: 0
+
+  &.marine .portrait
+    background-image: url(/images/portraits/marine.png)

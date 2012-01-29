@@ -45,21 +45,13 @@ settings.addAsset('hex', '/images/hex.png');
 
 settings.addAsset('marine', '/images/marine.png');
 
-settings.addConfig('terrainX', -40);
+settings.addConfig('terrainX', 100);
 
-settings.addConfig('terrainY', 100);
+settings.addConfig('terrainY', 165);
 
 settings.addConfig('gridColumns', 8);
 
 settings.addConfig('gridRows', 8);
-
-settings.addConfig('hexWidth', 126);
-
-settings.addConfig('hexHeight', 86);
-
-settings.addConfig('hexOffsetX', 63);
-
-settings.addConfig('hexOffsetY', 22);
 
 exports.assets = settings.assets;
 
